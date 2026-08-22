@@ -32,6 +32,16 @@ if not SECRET_KEY:
 
 ALLOWED_HOSTS = _env_list("ALLOWED_HOSTS", "localhost,127.0.0.1")
 
+render_host = os.environ.get("RENDER_EXTERNAL_HOSTNAME", "").strip()
+if render_host and render_host not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(render_host)
+
+CSRF_TRUSTED_ORIGINS = _env_list("CSRF_TRUSTED_ORIGINS", "")
+if render_host:
+    render_origin = f"https://{render_host}"
+    if render_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(render_origin)
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
