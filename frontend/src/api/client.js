@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const API_BASE = import.meta.env.VITE_API_URL || "";
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: API_BASE,
   headers: { "Content-Type": "application/json" },
 });
 
@@ -73,7 +75,7 @@ api.interceptors.response.use(
       if (refresh) {
         try {
           const { data } = await axios.post(
-            `${import.meta.env.VITE_API_URL}/api/auth/token/refresh/`,
+            `${API_BASE}/api/auth/token/refresh/`,
             { refresh },
           );
           storeTokens({ access: data.access });
